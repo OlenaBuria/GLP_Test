@@ -1,0 +1,5 @@
+Assertion error occurred
+assert 'Course Materials | Pearson' == 'Course Materials | Pearson1'
+  - Course Materials | Pearson
+  + Course Materials | Pearson1
+  ?                           +

@@ -1,0 +1,5 @@
+Assertion error occurred
+assert 'Pearson' == 'Course Materials | Pearson1'
+  - Pearson
+  + Course Materials | Pearson1
+This block will always execute

@@ -1,0 +1,2 @@
+There was an exception
+This block will always execute
