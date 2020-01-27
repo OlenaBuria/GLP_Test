@@ -31,7 +31,7 @@ class TestLogin:
             login.click_login()
             time.sleep(4)
             home_page = driver.title
-            assert home_page == "Course Materials | Pearson1"
+            assert home_page == "Course Materials | Pearson"
 
         except AssertionError as error:
             print("Assertion error occurred")
