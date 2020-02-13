@@ -1,21 +1,12 @@
-from selenium import webdriver
 import pytest
 import time
 import allure
 import moment
-# import sys
-# import os
-# sys.path.append("/Users/vburiol/PycharmProjects/GLP_Test/Pages/")
-# TEST_DIR = os.path.abspath(os.path.dirname(__file__))
-# DIR = TEST_DIR.split('/GLP_Test')[0]
-# os.chdir(DIR)
-# paths = [DIR]
-# sys.path = paths + sys.path
-
-
-from Pages.Instructor.loginPage import LoginPage
+from Scripts.loginInstructor import LoginInstructor
+from Scripts.logOutInstructor import LogOutInstructor
 from Pages.Instructor.homePage import HomePage
 from Utils import utils as utils
+from Utils import env
 
 
 @pytest.mark.usefixtures("test_setup")
@@ -24,12 +15,9 @@ class TestLogin:
     def test_login(self):
         try:
             driver = self.driver
-            driver.get(utils.URL)
-            login = LoginPage(driver)
-            login.enter_username(utils.USERNAME)
-            login.enter_password(utils.PASSWORD)
-            login.click_login()
-            time.sleep(4)
+            login_instructor = LoginInstructor(driver)
+            login_instructor.login_as_instructor()
+            time.sleep(10)
             home_page = driver.title
             assert home_page == "Course Materials | Pearson"
 
@@ -66,7 +54,7 @@ class TestLogin:
 
         try:
             user_name_displayed = driver.find_element_by_id("displayedUsername").text
-            assert user_name_displayed == utils.USERNAME
+            assert user_name_displayed == env.USERNAME
 
         except AssertionError as error:
             print("Assertion error occurred")
@@ -80,9 +68,8 @@ class TestLogin:
     def test_logout(self):
         try:
             driver = self.driver
-            homepage = HomePage(driver)
-            homepage.click_menu_instructor()
-            homepage.click_logout()
+            logout_as_instructor = LogOutInstructor(driver)
+            logout_as_instructor.logout_as_instructor()
             time.sleep(4)
             login_page = driver.title
             assert login_page == "Pearson Sign In"
@@ -114,6 +101,7 @@ class TestLogin:
         finally:
             print("This block will always execute")
 
+
 # run tests
 # python -m pytest
 #
@@ -122,6 +110,8 @@ class TestLogin:
 # python -m pytest --alluredir=reports/allure-reports
 
 # allure serve reports/allure-reports
+
+# java -jar jenkins.war --httpPort=9090 , in browser: http://localhost:9090
 
 
 

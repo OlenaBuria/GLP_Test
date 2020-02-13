@@ -1,10 +1,13 @@
-#CONSTANTS
+# CONSTANTS
 import inspect
+import moment
 
-URL = "https://rio-qa.pearson.com/"
-USERNAME = "rio_ins_qa_demo_02"
-PASSWORD = "Password11"
+URL = "stg"  # beta-qa, stg, prod, qa-int
+
+# Variables - DON`T CHANGE IT!
+SectionTitle = "Auto Mango " + moment.now().strftime("%m-%d-%Y_%H-%M")
 
 
 def whoami():
     return inspect.stack()[1][3]
+

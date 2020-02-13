@@ -2,7 +2,8 @@ import pytest
 
 
 def pytest_addoption(parser):
-    parser.addoption("--browser", action="store", default="chrome", help="Type in browser n(me e.g.chrome OR firefox")
+    parser.addoption("--browser", action="store", default="chrome",
+                     help="Type in browser name e.g.chrome OR firefox")
 
 
 @pytest.fixture(scope="class")
