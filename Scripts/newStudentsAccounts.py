@@ -1,4 +1,3 @@
-import pytest
 import csv
 import time
 import random
@@ -11,13 +10,16 @@ from Utils import utils as utils
 from Utils import env
 from selenium.webdriver.common.keys import Keys
 from Utils import randomNames as randomNames
+from Scripts.logOutStudent import LogOutStudent
 from Scripts.inviteURLCSV import GetInviteLink
 
 
-@pytest.mark.usefixtures("test_setup")
-class TestCreateStudentEnrollment:
+class NewStudentsAccounts:
 
-    def test_create_student_by_link(self):
+    def __init__(self, driver):
+        self.driver = driver
+
+    def create_new_students_accounts(self):
         driver = self.driver
         invite_link = GetInviteLink(driver)
         driver.get(invite_link.invite_student_link())
@@ -88,8 +90,8 @@ class TestCreateStudentEnrollment:
         time.sleep(5)
         create_account_page.yes_start_temp_access()
         time.sleep(5)
-
-
-
-
-
+        logout = LogOutStudent(driver)
+        logout.logout_as_student()
+        driver.get('chrome://settings/clearBrowserData')
+        # driver.execute_script("window.open('');")
+        time.sleep(2)

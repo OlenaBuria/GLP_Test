@@ -20,8 +20,8 @@ elif env_url == "stg":
     CourseID = "https://rio-stg.pearson.com/i/courses/5e34689ce4b0b8d8a6f28035"
 elif env_url == "prod":
     URL_PROD = "https://console.pearson.com"
-    USERNAME_PROD = "glp_qe_ins_prod_001"
-    PASSWORD_PROD = "Password@11"
+    USERNAME_PROD = "Username"
+    PASSWORD_PROD = "Password"
 elif env_url == "beta-qa":
     URL_BETA = "https://beta-qa.pearson.com/"
     USERNAME_BETA = "rio_ins_qa_demo_02"

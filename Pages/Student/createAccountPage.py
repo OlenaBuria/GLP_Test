@@ -27,6 +27,12 @@ class CreateAccountPage:
     def reenter_email_input(self, reenter_email_address):
         self.driver.find_element_by_id(self.reenter_email_input_text_id).send_keys(reenter_email_address)
 
+    def click_username(self):
+        self.driver.find_element_by_id(self.input_username_id).click()
+
+    def clear_username(self):
+        self.driver.find_element_by_id(self.input_username_id).clear()
+
     def input_username(self, username):
         self.driver.find_element_by_id(self.input_username_id).send_keys(username)
 
