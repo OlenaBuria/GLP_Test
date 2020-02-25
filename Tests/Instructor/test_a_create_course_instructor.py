@@ -10,11 +10,8 @@ from Scripts.loginInstructor import LoginInstructor
 from Pages.Instructor.homePage import HomePage
 from Pages.Instructor.materialsSearchPage import SearchMaterialsPage
 from Pages.Instructor.exchangePage import ExchangePage
-from Scripts.inviteURL import InviteURL
-from Scripts.courseURL import CourseURL
-from Pages.Instructor.diagnosticManagementPage import DiagnosticManagement
 from Pages.Instructor.dashboardCoursePage import DashboardPage
-from Pages.Instructor.createAssignmentPage import CreateAssignmentPage
+from Pages.Student.homePageStudent import HomePageStudent
 
 
 @pytest.mark.usefixtures("test_setup")
@@ -116,16 +113,14 @@ class TestCreateCourse:
         finally:
             print("This block will always execute")
 
-    def student_locked_course_rio(self):  # RIO course - doesn't exist from 02/10/2020
-        # Verify if locked course
+    def test_launch_dashboard_course(self):
         try:
             driver = self.driver
-            time.sleep(1)
-            home_page = HomePage(driver)
-            home_page.click_name_created_course()
-            diagnostic_management = DiagnosticManagement(driver)
+            home_page_student = HomePageStudent(driver)
+            home_page_student.click_course_name()
             time.sleep(2)
-            assert diagnostic_management.text_diagnostic_locked() == "The diagnostic is locked"
+            dashboard_page = DashboardPage(driver)
+            assert home_page_student.get_course_name_home_page() == dashboard_page.get_text_course_name()
         except AssertionError as error:
             print("Assertion error occurred")
             print(error)
@@ -152,36 +147,10 @@ class TestCreateCourse:
             print("No exceptions occurred")
         finally:
             print("This block will always execute")
-        diagnostic_management.pearson_logo_back_btn_click()
 
-    def empty_performance_page_locked_course_rio(self):  #RIO course - doesn't exist from 02/10/2020
-        #  Verify empty state if no students attempted the course and course locked
-        driver = self.driver
-        course_id_current = CourseURL(driver)
-        course_id_current.get_course_url()
-        time.sleep(2)
-        driver.find_element_by_xpath("//*[contains(text(), 'PERFORMANCE')]").click()
-        time.sleep(2)
-        number_of_students = driver.find_element_by_css_selector(".c-chart-one .arc-value-max").text
-        assert number_of_students == "0"
-        time.sleep(1)
-        class_proficiency_per_chapter = driver.find_element_by_css_selector(".overlay:nth-child(4) .large-lbl-b").text
-        assert class_proficiency_per_chapter == "Start with an overview by chapter"
-        students_most_challenging_objectives = driver.find_element_by_css_selector(".overlay:nth-child(3) > "
-                                                                                   "div:nth-child(1) > "
-                                                                                   ".large-lbl-b").text
-        assert students_most_challenging_objectives == "See where to focus your efforts"
-        list_of_students_with_proficient = driver.find_element_by_css_selector("div:nth-child(2) > .large-lbl-b").text
-        assert list_of_students_with_proficient == "Drill down for student details"
-        diagnostic_management = DiagnosticManagement(driver)
-        diagnostic_management.pearson_logo_back_btn_click()
-
-    def test_empty_dashboard_page_no_assignments_revel(self):
+    def test_empty_dashboard_page_no_assignments(self):
         try:
             driver = self.driver
-            home_page = HomePage(driver)
-            home_page.click_name_created_course()
-            time.sleep(2)
             dashboard_page = DashboardPage(driver)
             assert dashboard_page.no_assignments_yet() == "Encourage reading, practice, and review"
         except AssertionError as error:
@@ -211,74 +180,7 @@ class TestCreateCourse:
         finally:
             print("This block will always execute")
 
-    def test_create_publish_assignment(self):
-        try:
-            driver = self.driver
-            dashboard_page = DashboardPage(driver)
-            dashboard_page.click_create_assignment()
-            time.sleep(2)
-            create_assignment = CreateAssignmentPage(driver)
-            create_assignment.click_chapter1()
-            time.sleep(2)
-            create_assignment.click_select_all()
-            time.sleep(2)
-            create_assignment.click_add_content()
-            time.sleep(2)
-            create_assignment.click_due_date()
-            create_assignment.click_next_month()
-            create_assignment.select_day28_calendar()
-            time.sleep(2)
-            create_assignment.click_publish_assignment()
-            time.sleep(3)
-            success_popup = dashboard_page.success_popup_published_assignment()
-            assert success_popup == "You successfully published your assignment."
-        except AssertionError as error:
-            print("Assertion error occurred")
-            print(error)
-            curr_time = moment.now().strftime("_%m-%d-%Y_%H-%M-%S")
-            test_name = utils.whoami()
-            screenshot_name = str(test_name) + "" + curr_time
-            allure.attach(self.driver.get_screenshot_as_png(), name=screenshot_name,
-                          attachment_type=allure.attachment_type.PNG)
-            self.driver.get_screenshot_as_file("/Users/vburiol/PycharmProjects/GLP_Test/Screenshots/" + screenshot_name
-                                               + ".png")
-            raise
 
-        except:
-            print("There was an exception")
-            curr_time = moment.now().strftime("%m-%d-%Y_%H-%M-%S_")
-            test_name = utils.whoami()
-            screenshot_name = str(test_name) + "_" + curr_time
-            allure.attach(self.driver.get_screenshot_as_png(), name=screenshot_name,
-                          attachment_type=allure.attachment_type.PNG)
-            self.driver.get_screenshot_as_file("/Users/vburiol/PycharmProjects/GLP_Test/Screenshots/" + screenshot_name
-                                               + ".png")
-            raise
-        else:
-            print("No exceptions occurred")
-        finally:
-            print("This block will always execute")
-        dashboard_page.click_close_icon_on_success_popup()
-        time.sleep(1)
-
-    def test_student_enrollment_by_link(self):
-        driver = self.driver
-        invite_url = InviteURL(driver)
-        invite_link = invite_url.get_invite_student_url()
-        driver.execute_script("window.open('" + invite_link + "');")
-        time.sleep(1)
-
-    # def unlock_course(self):
-    # # Verify user is able to unlock the course. Unable to lock it again
-    #
-    # def empty_performance_page_unlocked_course(self):
-    # # Verify empty state if no students attempted the course and course unlocked
-    #
-    # def student_unlocked_course(self):
-    # # Verify the student is able to start assessment if unlocked course
-    #
-    # def pla_in_performance_page_unlocked_course_students(self):
-    # # Verify data is shown under performance page if student has finished the assessment
 
 
 
