@@ -37,12 +37,41 @@ class TestCopyCourse:
             exchange_page.click_save()
             home_page = HomePage(driver)
             time.sleep(4)
+            assert home_page.coach_mark_title() == "Done setting up your course dates and times?"
+            time.sleep(2)
+        except AssertionError as error:
+            print("Assertion error occurred")
+            print(error)
+            curr_time = moment.now().strftime("_%m-%d-%Y_%H-%M-%S")
+            test_name = utils.whoami()
+            screenshot_name = str(test_name) + "" + curr_time
+            allure.attach(self.driver.get_screenshot_as_png(), name=screenshot_name,
+                          attachment_type=allure.attachment_type.PNG)
+            self.driver.get_screenshot_as_file("/Users/vburiol/PycharmProjects/GLP_Test/Screenshots/" + screenshot_name
+                                               + ".png")
+            raise
+
+        except:
+            print("There was an exception")
+            curr_time = moment.now().strftime("%m-%d-%Y_%H-%M-%S_")
+            test_name = utils.whoami()
+            screenshot_name = str(test_name) + "_" + curr_time
+            allure.attach(self.driver.get_screenshot_as_png(), name=screenshot_name,
+                          attachment_type=allure.attachment_type.PNG)
+            self.driver.get_screenshot_as_file("/Users/vburiol/PycharmProjects/GLP_Test/Screenshots/" + screenshot_name
+                                               + ".png")
+            raise
+        else:
+            print("No exceptions occurred")
+        finally:
+            print("This block will always execute")
+        time.sleep(2)
+        home_page.click_link_got_it()
+        try:
             with open('/Users/vburiol/Documents/AutomationOutput/CopyCourseName.csv', mode='w') as file:
                 writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
                 writer.writerow(['Copy Course Name'])
                 writer.writerow(["Copy of " + utils.SectionTitle])
-            assert home_page.coach_mark_title() == "Done setting up your course dates and times?"
-            home_page.click_link_got_it()
             assert home_page.name_created_course_text() == "Copy of " + utils.SectionTitle
         except AssertionError as error:
             print("Assertion error occurred")
