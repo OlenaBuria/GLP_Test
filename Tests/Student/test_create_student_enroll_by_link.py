@@ -17,9 +17,9 @@ from Pages.Student.homePageStudent import HomePageStudent
 
 
 @pytest.mark.usefixtures("test_setup")
-class TestCreateStudentEnrollment:
+class TestCreateStudentEnrollmentByInviteLink:
 
-    def test_create_student_account_by_invite_link(self):
+    def test_create_account_by_invite_link_student(self):
         driver = self.driver
         invite_link = GetInviteLink(driver)
         driver.get(invite_link.invite_student_link())
@@ -91,15 +91,20 @@ class TestCreateStudentEnrollment:
         create_account_page.yes_start_temp_access()
         time.sleep(5)
 
-    def test_student_course_enrollment_by_invite_link(self):
+    def test_launch_course_first_time_enrollment_by_invite_link_student(self):
         try:
             driver = self.driver
             assignments_page = AssignmentsPage(driver)
             home_page_student = HomePageStudent(driver)
             home_page_student.click_course_name()
-            # driver.switch_to_alert()
-            assert home_page_student.get_course_name_home_page() == assignments_page.get_course_name()
             time.sleep(5)
+            i_frame = assignments_page.switch_to_i_frame()
+            driver.switch_to.frame(i_frame)
+            assert assignments_page.text_pop_up() == "Class with Revel just got easier"
+            assignments_page.click_close_class_with_revel_just_got_easier_popup()
+            assert home_page_student.get_course_name_home_page() == assignments_page.get_course_name()
+            driver.switch_to.default_content()
+            time.sleep(1)
         except AssertionError as error:
             print("Assertion error occurred")
             print(error)
@@ -128,8 +133,8 @@ class TestCreateStudentEnrollment:
             print("No exceptions occurred")
         finally:
             print("This block will always execute")
-        # assignments_page.click_close_class_with_revel_just_got_easier_popup()
         # assignments_page.click_close_start_here()
+        # time.sleep(2)
 
 
 

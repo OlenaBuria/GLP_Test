@@ -13,7 +13,7 @@ from Pages.Instructor.exchangePage import ExchangePage
 @pytest.mark.usefixtures("test_setup")
 class TestCopyCourse:
 
-    def test_copy_course(self):
+    def test_copy_existing_course_instructor(self):
         try:
             driver = self.driver
             login_instructor = LoginInstructor(driver)
@@ -41,6 +41,7 @@ class TestCopyCourse:
                 writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
                 writer.writerow(['Copy Course Name'])
                 writer.writerow(["Copy of " + utils.SectionTitle])
+            assert home_page.coach_mark_title() == "Done setting up your course dates and times?"
             home_page.click_link_got_it()
             assert home_page.name_created_course_text() == "Copy of " + utils.SectionTitle
         except AssertionError as error:

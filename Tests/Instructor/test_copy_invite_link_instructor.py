@@ -7,7 +7,7 @@ from Scripts.inviteURL import InviteURL
 @pytest.mark.usefixtures("test_setup")
 class TestCopyInviteLink:
 
-    def test_copy_invite_link_from_dashboard(self):
+    def test_copy_course_invite_link_from_home_page_instructor(self):
         driver = self.driver
         login_instructor = LoginInstructor(driver)
         login_instructor.login_as_instructor()

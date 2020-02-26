@@ -17,7 +17,7 @@ from Pages.Student.homePageStudent import HomePageStudent
 @pytest.mark.usefixtures("test_setup")
 class TestCreateCourse:
 
-    def test_create_course_i(self):
+    def test_create_course_instructor(self):
         # Login
         try:
             driver = self.driver
@@ -78,7 +78,36 @@ class TestCreateCourse:
         exchange_page.click_save()
         home_page = HomePage(driver)
         time.sleep(4)
-        home_page.click_link_got_it()
+        try:
+            assert home_page.coach_mark_title() == "Done setting up your course dates and times?"
+            home_page.click_link_got_it()
+        except AssertionError as error:
+            print("Assertion error occurred")
+            print(error)
+            curr_time = moment.now().strftime("_%m-%d-%Y_%H-%M-%S")
+            test_name = utils.whoami()
+            screenshot_name = str(test_name) + "" + curr_time
+            allure.attach(self.driver.get_screenshot_as_png(), name=screenshot_name,
+                          attachment_type=allure.attachment_type.PNG)
+            self.driver.get_screenshot_as_file("/Users/vburiol/PycharmProjects/GLP_Test/Screenshots/" + screenshot_name
+                                               + ".png")
+            raise
+
+        except:
+            print("There was an exception")
+            curr_time = moment.now().strftime("%m-%d-%Y_%H-%M-%S_")
+            test_name = utils.whoami()
+            screenshot_name = str(test_name) + "_" + curr_time
+            allure.attach(self.driver.get_screenshot_as_png(), name=screenshot_name,
+                          attachment_type=allure.attachment_type.PNG)
+            self.driver.get_screenshot_as_file("/Users/vburiol/PycharmProjects/GLP_Test/Screenshots/" + screenshot_name
+                                               + ".png")
+            raise
+        else:
+            print("No exceptions occurred")
+        finally:
+            print("This block will always execute")
+
         with open('/Users/vburiol/Documents/AutomationOutput/CourseName.csv', mode='w') as file:
             writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
             writer.writerow(['Course Name'])
@@ -113,7 +142,7 @@ class TestCreateCourse:
         finally:
             print("This block will always execute")
 
-    def test_launch_dashboard_course(self):
+    def test_launch_created_course_instructor(self):
         try:
             driver = self.driver
             home_page_student = HomePageStudent(driver)
@@ -148,7 +177,7 @@ class TestCreateCourse:
         finally:
             print("This block will always execute")
 
-    def test_empty_dashboard_page_no_assignments(self):
+    def test_empty_course_dashboard_page_no_assignments_instructor(self):
         try:
             driver = self.driver
             dashboard_page = DashboardPage(driver)

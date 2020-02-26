@@ -13,7 +13,7 @@ from Pages.Student.homePageStudent import HomePageStudent
 @pytest.mark.usefixtures("test_setup")
 class TestCreatePublishAssignment:
 
-    def test_create_publish_assignment(self):
+    def test_create_publish_assignment_instructor(self):
         try:
             driver = self.driver
             login_instructor = LoginInstructor(driver)

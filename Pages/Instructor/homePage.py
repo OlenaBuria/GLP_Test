@@ -24,6 +24,7 @@ class HomePage:
                                                                             "following-sibling::" \
                                                                             "div[@class='course-options ']//" \
                                                                             "*[contains(text(), 'Copy Course')]"
+        self.coach_mark_title_got_it_xpath = "//div[@class='o-coach-mark__content ']/h6"
 
     def click_menu_instructor(self):
         self.driver.find_element_by_css_selector(self.instructor_menu_link_css).click()
@@ -49,5 +50,9 @@ class HomePage:
 
     def click_copy_course(self):
         self.driver.find_element_by_xpath(self.copy_course_xpath).click()
+
+    def coach_mark_title(self):
+        coach_mark_title = self.driver.find_element_by_xpath(self.coach_mark_title_got_it_xpath).text
+        return coach_mark_title
 
 

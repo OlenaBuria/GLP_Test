@@ -2,21 +2,20 @@ import pytest
 import time
 import allure
 import moment
-from Scripts.loginInstructor import LoginInstructor
-from Scripts.logOutInstructor import LogOutInstructor
-from Pages.Instructor.homePage import HomePage
+from Scripts.loginStudent import LoginStudent
+from Scripts.logOutStudent import LogOutStudent
+from Pages.Student.homePageStudent import HomePageStudent
 from Utils import utils as utils
-from Utils import env
 
 
 @pytest.mark.usefixtures("test_setup")
 class TestLogin:
 
-    def test_login_instructor(self):
+    def test_login_student(self):
         try:
             driver = self.driver
-            login_instructor = LoginInstructor(driver)
-            login_instructor.login_as_instructor()
+            login_student = LoginStudent(driver)
+            login_student.login_as_student()
             time.sleep(10)
             home_page = driver.title
             assert home_page == "Course Materials | Pearson"
@@ -48,13 +47,13 @@ class TestLogin:
         finally:
             print("This block will always execute")
 
-        home_page = HomePage(driver)
-        home_page.click_menu_instructor()
-        home_page.click_account_settings()
+        home_page_student = HomePageStudent(driver)
+        home_page_student.click_menu_student()
+        home_page_student.click_account_settings_menu()
 
         try:
-            user_name_displayed = driver.find_element_by_id("displayedUsername").text
-            assert user_name_displayed == env.USERNAME
+            user_name_displayed = home_page_student.displayed_user_name_menu()
+            assert user_name_displayed == login_student.get_student_user_name()
 
         except AssertionError as error:
             print("Assertion error occurred")
@@ -65,11 +64,11 @@ class TestLogin:
             print("There was an exception")
             raise
 
-    def test_logout_instructor(self):
+    def test_logout_student(self):
         try:
             driver = self.driver
-            logout_as_instructor = LogOutInstructor(driver)
-            logout_as_instructor.logout_as_instructor()
+            logout_as_instructor = LogOutStudent(driver)
+            logout_as_instructor.logout_as_student()
             time.sleep(4)
             login_page = driver.title
             assert login_page == "Pearson Sign In"
@@ -100,20 +99,3 @@ class TestLogin:
             print("No exceptions occurred")
         finally:
             print("This block will always execute")
-
-
-# run tests
-# python -m pytest
-#
-# python -m pytest --html=reports/report.html
-#
-# python -m pytest --alluredir=reports/allure-reports
-
-# allure serve reports/allure-reports
-
-# java -jar jenkins.war --httpPort=9090 , in browser: http://localhost:9090
-
-
-
-
-
