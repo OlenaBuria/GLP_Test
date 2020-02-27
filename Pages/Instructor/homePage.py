@@ -1,5 +1,5 @@
-from Utils import utils as utils
 from Scripts.courseURLCSV import GetCourseURL
+from Scripts.copycourseNameCSV import GetCopyCourseName
 
 
 class HomePage:
@@ -11,7 +11,9 @@ class HomePage:
         self.menu_username_displayed_text_id = "displayedUsername"
         self.logout_link_text_css = ".pe-btn__primary--btn_xlarge"
         self.got_it_popup_link_css = ".o-coach-mark__got-it"
-        self.large_course_title_text_xpath = "//*[contains(text()," + " '" + utils.SectionTitle + "'" + ")]"
+        copy_course_name = GetCopyCourseName(driver)
+        self.large_course_title_text_xpath = \
+            "//*[contains(text()," + " '" + copy_course_name.get_copy_course_name() + "'" + ")]"
         course_url = GetCourseURL(driver)
         get_course_url = course_url.get_course_url()
         self.course_options_xpath = "//div[@class='course-info']//" \

@@ -8,6 +8,7 @@ from Utils import utils as utils
 from Scripts.loginInstructor import LoginInstructor
 from Pages.Instructor.homePage import HomePage
 from Pages.Instructor.exchangePage import ExchangePage
+from Scripts.courseNameCSV import GetCourseName
 
 
 @pytest.mark.usefixtures("test_setup")
@@ -36,9 +37,9 @@ class TestCopyCourse:
             time.sleep(2)
             exchange_page.click_save()
             home_page = HomePage(driver)
-            time.sleep(4)
+            time.sleep(8)
             assert home_page.coach_mark_title() == "Done setting up your course dates and times?"
-            time.sleep(2)
+            time.sleep(3)
         except AssertionError as error:
             print("Assertion error occurred")
             print(error)
@@ -67,12 +68,14 @@ class TestCopyCourse:
             print("This block will always execute")
         time.sleep(2)
         home_page.click_link_got_it()
+        time.sleep(2)
+        course_name = GetCourseName(driver)
         try:
             with open('/Users/vburiol/Documents/AutomationOutput/CopyCourseName.csv', mode='w') as file:
                 writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
                 writer.writerow(['Copy Course Name'])
-                writer.writerow(["Copy of " + utils.SectionTitle])
-            assert home_page.name_created_course_text() == "Copy of " + utils.SectionTitle
+                writer.writerow(["Copy of " + course_name.get_course_name()])
+            assert home_page.name_created_course_text() == "Copy of " + course_name.get_course_name()
         except AssertionError as error:
             print("Assertion error occurred")
             print(error)
