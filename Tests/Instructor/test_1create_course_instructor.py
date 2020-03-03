@@ -11,7 +11,9 @@ from Pages.Instructor.homePage import HomePage
 from Pages.Instructor.materialsSearchPage import SearchMaterialsPage
 from Pages.Instructor.exchangePage import ExchangePage
 from Pages.Instructor.dashboardCoursePage import DashboardPage
+from Scripts.courseNameCSV import GetCourseName
 from Pages.Student.homePageStudent import HomePageStudent
+from Scripts.courseURL import CourseURL
 
 
 @pytest.mark.usefixtures("test_setup")
@@ -65,6 +67,10 @@ class TestCreateCourse:
         exchange_page.click_next()
         exchange_page.click_section_code()
         exchange_page.input_section_code(utils.SectionTitle)
+        with open('/Users/vburiol/Documents/AutomationOutput/CourseName.csv', mode='w') as file:
+            writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            writer.writerow(['Course Name'])
+            writer.writerow([utils.SectionTitle])
         exchange_page.check_online_course()
         exchange_page.click_course_start_date()
         exchange_page.select_current_date_box()
@@ -76,8 +82,8 @@ class TestCreateCourse:
         exchange_page.select_28day_calendar()
         time.sleep(2)
         exchange_page.click_save()
+        time.sleep(8)
         home_page = HomePage(driver)
-        time.sleep(4)
         try:
             assert home_page.coach_mark_title() == "Done setting up your course dates and times?"
             home_page.click_link_got_it()
@@ -107,14 +113,9 @@ class TestCreateCourse:
             print("No exceptions occurred")
         finally:
             print("This block will always execute")
-
-        with open('/Users/vburiol/Documents/AutomationOutput/CourseName.csv', mode='w') as file:
-            writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-            writer.writerow(['Course Name'])
-            writer.writerow([utils.SectionTitle])
         time.sleep(2)
         try:
-            assert home_page.name_created_course_text() == utils.SectionTitle
+            assert home_page.name_created_course_from_csv_text() == utils.SectionTitle
         except AssertionError as error:
             print("Assertion error occurred")
             print(error)
@@ -145,11 +146,12 @@ class TestCreateCourse:
     def test_launch_created_course_instructor(self):
         try:
             driver = self.driver
-            home_page_student = HomePageStudent(driver)
-            home_page_student.click_course_name()
+            home_page = HomePage(driver)
+            home_page.click_name_created_course_from_csv()
             time.sleep(2)
             dashboard_page = DashboardPage(driver)
-            assert home_page_student.get_course_name_home_page() == dashboard_page.get_text_course_name()
+            get_course_name_csv = GetCourseName(driver)
+            assert get_course_name_csv.get_course_name() == dashboard_page.get_text_course_name()
         except AssertionError as error:
             print("Assertion error occurred")
             print(error)
@@ -180,6 +182,7 @@ class TestCreateCourse:
     def test_empty_course_dashboard_page_no_assignments_instructor(self):
         try:
             driver = self.driver
+            time.sleep(4)
             dashboard_page = DashboardPage(driver)
             assert dashboard_page.no_assignments_yet() == "Encourage reading, practice, and review"
         except AssertionError as error:

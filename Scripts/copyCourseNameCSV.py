@@ -12,6 +12,6 @@ class GetCopyCourseName:
         for row in reader:
             idx += 1
             if idx == 1:
-                course_name = row["Copy Course Name"]
-                return course_name
+                copy_course_name = row["Copy Course Name"]
+                return copy_course_name
         reader.close()

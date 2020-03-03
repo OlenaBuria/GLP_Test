@@ -1,5 +1,7 @@
 from Scripts.courseURLCSV import GetCourseURL
-from Scripts.copycourseNameCSV import GetCopyCourseName
+from Scripts.copyCourseNameCSV import GetCopyCourseName
+from Utils import utils
+from Scripts.courseNameCSV import GetCourseName
 
 
 class HomePage:
@@ -11,9 +13,10 @@ class HomePage:
         self.menu_username_displayed_text_id = "displayedUsername"
         self.logout_link_text_css = ".pe-btn__primary--btn_xlarge"
         self.got_it_popup_link_css = ".o-coach-mark__got-it"
-        copy_course_name = GetCopyCourseName(driver)
-        self.large_course_title_text_xpath = \
-            "//*[contains(text()," + " '" + copy_course_name.get_copy_course_name() + "'" + ")]"
+        self.large_course_title_text_xpath = "//*[contains(text()," + " '" + utils.SectionTitle + "'" + ")]"
+        course_name_csv = GetCourseName(driver)
+        self.large_course_title_text_from_csv_xpath =\
+            "//*[contains(text()," + " '" + course_name_csv.get_course_name() + "'" + ")]"
         course_url = GetCourseURL(driver)
         get_course_url = course_url.get_course_url()
         self.course_options_xpath = "//div[@class='course-info']//" \
@@ -44,8 +47,15 @@ class HomePage:
         name_course = self.driver.find_element_by_xpath(self.large_course_title_text_xpath).text
         return name_course
 
+    def name_created_course_from_csv_text(self):
+        name_course_from_csv = self.driver.find_element_by_xpath(self.large_course_title_text_from_csv_xpath).text
+        return name_course_from_csv
+
     def click_name_created_course(self):
         self.driver.find_element_by_xpath(self.large_course_title_text_xpath).click()
+
+    def click_name_created_course_from_csv(self):
+        self.driver.find_element_by_xpath(self.large_course_title_text_from_csv_xpath).click()
 
     def click_course_options(self):
         self.driver.find_element_by_xpath(self.course_options_xpath).click()

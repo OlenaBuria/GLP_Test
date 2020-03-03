@@ -18,8 +18,8 @@ class TestCreatePublishAssignment:
             driver = self.driver
             login_instructor = LoginInstructor(driver)
             login_instructor.login_as_instructor()
-            home_page_student = HomePageStudent(driver)
-            home_page_student.click_course_name()
+            home_page_student = HomePageStudent(driver) # verify
+            home_page_student.click_course_name() # verify
             dashboard_page = DashboardPage(driver)
             dashboard_page.click_create_assignment()
             time.sleep(2)

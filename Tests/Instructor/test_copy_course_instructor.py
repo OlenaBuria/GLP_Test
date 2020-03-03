@@ -1,5 +1,4 @@
 import pytest
-import csv
 import moment
 import time
 import allure
@@ -7,8 +6,10 @@ import allure
 from Utils import utils as utils
 from Scripts.loginInstructor import LoginInstructor
 from Pages.Instructor.homePage import HomePage
+from Pages.Instructor.homePageCopyCourse import HomePageCopyCourse
 from Pages.Instructor.exchangePage import ExchangePage
-from Scripts.courseNameCSV import GetCourseName
+from Scripts.copyCourseNameCSV import GetCopyCourseName
+from Scripts.copyCourseName import CopyCourseName
 
 
 @pytest.mark.usefixtures("test_setup")
@@ -34,12 +35,13 @@ class TestCopyCourse:
             exchange_page.click_next_calendar()
             exchange_page.click_next_calendar()
             exchange_page.select_28day_calendar()
-            time.sleep(2)
-            exchange_page.click_save()
+            time.sleep(1)
+            copy_course_name = CopyCourseName(driver)
+            copy_course_name.get_copy_course_name()
             home_page = HomePage(driver)
-            time.sleep(8)
+            exchange_page.click_save()
+            time.sleep(12)
             assert home_page.coach_mark_title() == "Done setting up your course dates and times?"
-            time.sleep(3)
         except AssertionError as error:
             print("Assertion error occurred")
             print(error)
@@ -69,13 +71,12 @@ class TestCopyCourse:
         time.sleep(2)
         home_page.click_link_got_it()
         time.sleep(2)
-        course_name = GetCourseName(driver)
         try:
-            with open('/Users/vburiol/Documents/AutomationOutput/CopyCourseName.csv', mode='w') as file:
-                writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-                writer.writerow(['Copy Course Name'])
-                writer.writerow(["Copy of " + course_name.get_course_name()])
-            assert home_page.name_created_course_text() == "Copy of " + course_name.get_course_name()
+            driver = self.driver
+            get_copy_course_name_csv = GetCopyCourseName(driver)
+            home_page_copy_course = HomePageCopyCourse(driver)
+            copy_course_name = "Copy of " + home_page_copy_course.get_text_copy_course()
+            assert copy_course_name == get_copy_course_name_csv.get_copy_course_name()
         except AssertionError as error:
             print("Assertion error occurred")
             print(error)

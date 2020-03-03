@@ -11,6 +11,8 @@ class ExchangePage:
         self.course_end_date_id = "course-end-date"
         self.click_next_calendar_css = ".pe-arrowIcons:nth-child(3)"
         self.select_28day_calendar_id = "day28"
+        self.copy_course_name_xpath = "//*[@class='course-name pe-title--large']"
+        self.edit_copy_course_xpath = "//*[@class='pe-icon--btn section-tooltip']"
 
     def click_section_title(self):
         self.driver.find_element_by_id(self.input_section_title_text_id).click()
@@ -47,5 +49,15 @@ class ExchangePage:
 
     def click_save(self):
         self.driver.find_element_by_id(self.click_next_btn_id).click()
+
+    def text_copy_course_name_xpath(self):
+        copy_course_name_text = self.driver.find_element_by_xpath(self.copy_course_name_xpath).text
+        edit_copy_course_text = self.driver.find_element_by_xpath(self.edit_copy_course_xpath).text
+        copy_course_needed_text = copy_course_name_text.replace(edit_copy_course_text, '')
+        elem_to_extract = "\n"
+        copy_course_needed_text_completed = copy_course_needed_text.replace(elem_to_extract, '')
+        return copy_course_needed_text_completed
+
+
 
 

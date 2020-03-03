@@ -11,7 +11,7 @@ class CourseURL:
     def get_course_url(self):
         driver = self.driver
         home_page = HomePage(driver)
-        home_page.click_name_created_course()
+        home_page.click_name_created_course_from_csv()
         time.sleep(2)
         url_now = driver.current_url  # Course URL
         with open('/Users/vburiol/Documents/AutomationOutput/CourseLink.csv', mode='w') as file:

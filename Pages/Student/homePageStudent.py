@@ -12,6 +12,7 @@ class HomePageStudent:
             "//*[contains(text()," + " '" + get_course_name.get_course_name() + "'" + ")]"
         self.account_settings_menu_css = ".applyHover > span"
         self.displayed_user_name_menu_id = "displayedUsername"
+        self.not_joined_course_yet_xpath = "//*[@class='placeholder-content']/h3"
 
     def click_menu_student(self):
         self.driver.find_element_by_css_selector(self.student_menu_link_css).click()
@@ -32,3 +33,7 @@ class HomePageStudent:
     def get_course_name_home_page(self):
         course_name = self.driver.find_element_by_xpath(self.small_course_title_text_xpath).text
         return course_name
+
+    def not_joined_course_yet(self):
+        not_joined_course_yet = self.driver.find_element_by_xpath(self.not_joined_course_yet_xpath).text
+        return not_joined_course_yet
