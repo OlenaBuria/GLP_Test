@@ -2,7 +2,7 @@ class DashboardPage:
 
     def __init__(self, driver):
         self.driver = driver
-        self.encourage_reading_text_css = ".pe-title > span"
+        self.encourage_reading_text_css = ".pe-bold > span"
         self.create_assignment_btn_css = ".imitation-pe-btn-primary > span"
         self.popup_success_published_assignment_css = ".pe-label"
         self.popup_success_published_assignment_xpath = "//div[@class='alert-content']"

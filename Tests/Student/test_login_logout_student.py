@@ -53,7 +53,7 @@ class TestLogin:
 
         try:
             user_name_displayed = home_page_student.displayed_user_name_menu()
-            assert user_name_displayed == login_student.get_student_user_name()
+            assert str.capitalize(user_name_displayed) == login_student.get_student_user_name()
 
         except AssertionError as error:
             print("Assertion error occurred")
